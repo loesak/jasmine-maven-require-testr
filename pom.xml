@@ -1,0 +1,117 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.fico.cdm</groupId>
+	<artifactId>com.fico.fusion.web</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<properties>
+		<phantom.dir>${basedir}/test/lib/phantomjs</phantom.dir>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<properties>
+				<phantom.binary>${phantom.dir}/phantomjs-win.exe</phantom.binary>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>mac</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<phantom.binary>${phantom.dir}/phantomjs-mac</phantom.binary>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+					<family>linux</family>
+				</os>
+			</activation>
+			<properties>
+				<phantom.binary>${phantom.dir}/phantomjs-linux</phantom.binary>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<sourceDirectory>js</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>com.github.searls</groupId>
+				<artifactId>jasmine-maven-plugin</artifactId>
+				<version>1.3.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<debug>true</debug>
+					
+					<jsSrcDir>${project.basedir}</jsSrcDir>
+					<sourceIncludes>
+						<!-- application source -->
+						<inlcude>js/**/*.js</inlcude>
+						
+						<!-- test source -->
+						<include>test/lib/testr/*.js</include>
+					</sourceIncludes>
+					
+					<customRunnerTemplate>${project.basedir}/test/runner.tmpl</customRunnerTemplate>
+					
+					<!-- not supported until 1.3.1.1 -->
+<!-- 					<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName> -->
+<!-- 					<webDriverCapabilities> -->
+<!-- 						<phantomjs.binary.path>${phantom.binary}</phantomjs.binary.path> -->
+<!-- 					</webDriverCapabilities> -->
+					
+					<jasmineTargetDir>${project.basedir}/target/surefire-reports</jasmineTargetDir>
+					
+					<keepServerAlive>true</keepServerAlive>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.github.searls</groupId>
+					<artifactId>jasmine-maven-plugin</artifactId>
+					<version>1.3.1.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>achingbrain-releases</id>
+			<url>http://achingbrain.github.com/maven-repo/releases</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>achingbrain-snapshots</id>
+			<url>http://achingbrain.github.com/maven-repo/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+</project>
